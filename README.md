@@ -45,7 +45,7 @@ La primera fase del proyecto consistió en desarrollar una aplicación monolíti
 
 ### 3.2. diagrama de arquitectura
 
-![img_1.png](img_1.png)
+![img_1.png](src/main/resources/imagenes/img_1.png)
 
 ### 3.3. Funcionalidad
 
@@ -71,6 +71,121 @@ El monolito se descompuso en tres microservicios independientes, cada uno respon
 
 - **AWS Lambda:** Cada microservicio fue empaquetado y desplegado como una función AWS Lambda independiente. Esto elimina la necesidad de gestionar servidores, permitiendo que la aplicación escale automáticamente según la demanda.
 - **Amazon API Gateway:** Se configuró un API Gateway para cada función Lambda, exponiendo endpoints HTTP seguros al mundo exterior. Esto actúa como la puerta de entrada para todas las peticiones a los microservicios.
+# 🧠 Arquitectura Serverless + EC2 — Despliegue de Microservicios Spring Boot en AWS
+
+## 🏗️ Componentes Principales
+- **AWS Cognito** → Autenticación y autorización de usuarios (JWT).
+- **AWS API Gateway** → Exposición y enrutamiento de endpoints REST.
+- **AWS Lambda (por microservicio)** → Funciones con `LambdaHandler`.
+- **EC2 Frontend (Apache + Vue/React)** → Servidor web.
+- **EC2 Base de Datos (Docker + MySQL)** → Persistencia.
+- **IAM Roles** → Permisos entre servicios.
+
+---
+
+## ⚙️ 1. Configuración de AWS Cognito
+1. Crear un **User Pool**.
+2. Crear un **App Client** sin secreto.
+3. Activar flujos de autenticación con JWT.
+4. Obtener `UserPoolId` y `AppClientId`.
+5. Usar Cognito como **Authorizer** en API Gateway.
+
+---
+
+![img_2.png](src/main/resources/imagenes/img_2.png)
+
+![img_5.png](src/main/resources/imagenes/img_5.png)
+
+## 🚪 2. Creación de Microservicios en Lambda
+1. Empaquetar con Maven:
+   ```bash
+   mvn clean package
+   ```
+Asignar rol IAM con acceso a CloudWatch y RDS/EC2.
+
+Repetir por microservicio.
+
+## 🌐 3. Configuración de API Gateway
+
+Crear REST API.
+
+Definir recursos y métodos:
+
+   ```bash
+      /user → Lambda: userService
+      /post → Lambda: postService
+      /feed → Lambda: feedService
+   ```
+
+![img_3.png](src/main/resources/imagenes/img_3.png)
+
+![img_4.png](src/main/resources/imagenes/img_4.png)
+
+Integrar con Lambda.
+
+Añadir Cognito Authorizer.
+
+Habilitar CORS.
+
+Desplegar API y obtener Invoke URL.
+
+## 🗄️ 4. Base de Datos Dockerizada en EC2
+
+Crear instancia EC2 (Linux/Ubuntu).
+
+Instalar Docker:
+
+   ```bash
+    sudo apt update && sudo apt install docker.io -y
+   ```
+Ejecutar contenedor MySQL:
+   ```bash
+    sudo docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=admin123 -p 3306:3306 -d mysql:8.0
+   ```
+Crear base de datos twitter_clone.
+
+Configurar conexión en application.properties con la IP de EC2.
+
+
+## 💻 5. Despliegue del Frontend (EC2 con Apache)
+
+Crear instancia EC2 para el frontend.
+
+Instalar Apache:
+
+   ```bash
+    sudo apt update && sudo apt install apache2 -y
+
+   ```
+## 🔒 6 Certificado SSL Gratuito con Let's Encrypt
+
+Instalar Certbot:
+   ```bash
+
+sudo apt install certbot python3-certbot-apache -y
+   ```
+
+Generar certificado SSL:
+
+
+   ```bash
+sudo certbot --apache -d twitterclone.duckdns.org
+   ```
+
+
+Verificar instalación:
+
+   ```bash
+
+sudo systemctl status apache2
+   ```
+
+Configurar renovación automática:
+
+   ```bash
+
+sudo certbot renew --dry-run
+   ```
 
 ### 4.3. Implementación de Seguridad con Cognito y JWT
 
@@ -83,8 +198,11 @@ Para asegurar la arquitectura, se integró Amazon Cognito:
 ---
 
 ## 5. Diagrama de Arquitectura Final
-![img.png](img.png)
+![img.png](src/main/resources/imagenes/img.png)
 
+## video de prueba
+
+https://youtu.be/17DAXGAJYmM
 
 
 ## Authors
