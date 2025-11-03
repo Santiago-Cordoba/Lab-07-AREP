@@ -85,3 +85,16 @@ Para asegurar la arquitectura, se integró Amazon Cognito:
 ## 5. Diagrama de Arquitectura Final
 ![img.png](img.png)
 
+
+
+## Authors
+
+* **Santiago Córdoba Dueñas**  - [Santiago Córdoba](https://github.com/Santiago-Cordoba)
+* **Santiago Coronado Pinzon** - [Santiago Coronado](https://github.com/Santiago12323)
+* **Nicolas Prieto** - [Nicolas Prieto](https://github.com/NicolasPriVar)
+
+## Acknowledgments
+
+* Aprendizaje acerca del funcionamiento de los Lambda en AWS
+* Refuerzo de los monolitos
+* Aprendizaje de JWT.
