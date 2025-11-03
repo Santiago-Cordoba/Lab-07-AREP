@@ -11,6 +11,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Getter
+@Setter
 public class Post {
     @Id
     @GeneratedValue
@@ -33,4 +35,6 @@ public class Post {
 
     @Column(nullable = false)
     private Instant createdAt;
+
+
 }
